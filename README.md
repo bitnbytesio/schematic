@@ -61,6 +61,18 @@ Schematic.create([section1, section2]);
 
 - email, int|numeric, float, alpha_num(accept underscore and aplha numeric charaters), alpha_dashnum (accept underscore, hyphen alpha numeric characters), alphadash (accepts alpha and - hyphen only), alpha_ (accepts alpha and underscore), alphanum (accepts alpha numeric characters only), alpha (accepts alphabets only), multi-int (accepts comma seperated numerics for eg: 1,2,3), multi-string (accepts comma seperateed for eg: apple,red,bucket ).
 
+
+# Input Fields:
+
+- options (for select element ie. dropdown )
+- choice (for radio type input)
+- multi-choice (for checkbox input type)
+- text (for input type text)
+- email (for input type email)
+- file (for input type file)
+- password (fo input type password)
+- textarea (for textarea element)
+
 ## Contributing
 
 Contributions to the **Schematic** are welcome.
