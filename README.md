@@ -18,7 +18,7 @@ Schematic is usefull in **rest api development**. it providing an easier and exp
 ```javascript
 // create page config
 var config = {
-                title: 'Schematic Api v1.0',
+                title: 'Schematic Api v1.2',
                 description: 'World Open Source Development Association (WOSDA)',
                 url: 'http://example.com/api/v1'
               };
@@ -36,7 +36,10 @@ var section1 = {
                       type: 'email', name: 'email', decription: 'Enter your email', param_type: 'form', data_type: 'email'
                     },
                     {
-                      type: 'pasword', name: 'password', decription: 'Enter your pasword', param_type: 'form', data_type: 'alpha_num'
+                      type: 'password', name: 'password', decription: 'Enter your pasword', param_type: 'form', data_type: 'alpha_num'
+                    },
+                    {
+                      type: 'options', name: 'role', decription: 'Select your role', param_type: 'form', data_type: 'numeric', 'options': { '1':'admin', '2':'editor', '3':'contributor' }
                     }
                   ]
                 };
@@ -54,6 +57,9 @@ var section2 = {
                 };
 
 Schematic.create([section1, section2]);
+
+// Note: same syntaxt ie is used in options filed should be on field type choice and multi-choise ('options': { '1':'admin', '2':'editor', '3':'contributor' })
+
 ```
 
 # Data types: 
