@@ -56,6 +56,8 @@ var section2 = {
 Schematic.create([section1, section2]);
 ```
 
+## Data types: email, int|numeric, float, alpha_num(accept underscore and aplha numeric charaters), alpha_dashnum (accept underscore, hyphen alpha numeric characters), alphadash (accepts alpha and - hyphen only), alpha_ (accepts alpha and underscore), alphanum (accepts alpha numeric characters only), alpha (accepts alphabets only), multi-int (accepts comma seperated numerics for eg: 1,2,3), multi-string (accepts comma seperateed for eg: apple,red,bucket ).
+
 ## Contributing
 
 Contributions to the **Schematic** are welcome.
