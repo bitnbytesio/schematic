@@ -115,6 +115,7 @@ body {
     border-radius: 2px;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    position: inherit;
 }
 #schematic-dom .radio, #schematic-dom .checkbox {
     position: relative;
@@ -126,7 +127,7 @@ body {
 }
 
 #schematic-dom .radio input[type="radio"], #schematic-dom .radio-inline input[type="radio"], #schematic-dom .checkbox input[type="checkbox"], #schematic-dom .checkbox-inline input[type="checkbox"] {
-
+    position: inherit;
 }
 #schematic-dom .page {
     border-color: #DDD;
@@ -296,6 +297,10 @@ body {
     line-height: 1.42857;
     text-align: center;
     border: 1px solid transparent;
+}
+
+#schematic-dom .required {
+    color:#f00;
 }
 
 .string { color: green; }
