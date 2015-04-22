@@ -1,12 +1,12 @@
 /* 
  * @project Schematic
- * @version 1.2
+ * @version 1.4
  * @author Harcharan Singh
  * @git: https://github.com/artisangang/schematic
  */
 
 if ("undefined" === typeof jQuery)
-    throw new Error("Action Ajax JavaScript requires jQuery to work");
+    throw new Error("Schematic JavaScript requires jQuery to work");
 
 var Schematic = Schematic || {};
 Schematic = {
@@ -42,7 +42,7 @@ Schematic = {
         this.__page = dom;
     },
     about: function() {
-        alert('Schematic 1.2 \r\n Author: Harcharan Singh');
+        alert('Schematic 1.4 \r\n Author: Harcharan Singh');
     },
     __createSchematicStage: function() {
         dom = '<div class="container-fluid" id="schematic-dom">';
@@ -71,6 +71,7 @@ Schematic = {
             param_type = (typeof element.param_type === 'undefined') ? 'form' : element.param_type;
             data_type = (typeof element.data_type === 'undefined') ? 'string' : element.data_type;
             is_required = (typeof element.required === 'undefined') ? '' : 'required';
+			value = (typeof element.value === 'undefined') ? '' : element.value;
             if (element.type === 'options') {
                 dom += "<tr><td>";
                 label = (typeof element.label !== "undefined") ? element.label : element.name;
@@ -96,22 +97,28 @@ Schematic = {
             if (element.type === 'choice') {
                 dom += "<tr><td>";
                 label = (typeof element.label !== "undefined") ? element.label : element.name;
-                if (is_required == "required") {
-                    label += "<span class='required'>*</span>";
-                }
+               
                 dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
                 dom += "</td>";
                 dom += "<td>";
-                dom += "<div id='" + element.name + "'>";
+                dom += "<div id='choice'>";
 
                     option = element.options;
                     for (item in option) {
-                        console.log(option);
-                        value = option[item];
-                        select = (value === element.default) ? 'checked' : '';
+                        option = options[item];
+						value = (typeof option.value === 'undefined') ? '' : option.value;
+						name = (typeof option.name === 'undefined') ? 'Undefined Name' : option.name;
+						label = (typeof option.label === 'undefined') ? name : option.label;
+                        checked = (typeof option.checked === 'undefined') ? '' : 'checked';
+						required = (typeof option.required === 'undefined') ? '' : 'required';
+						
+						if (required == "required") {
+							label += "<span class='required'>*</span>";
+						}
+											               
                         dom += "<div class='radio'>";
-                        dom += "<input data-type='" + data_type + "' type='radio' class='element " + param_type + "' id='" + value + "' name='" + element.name + "' value='" + item + "' " + select + " " + is_required + ">";
-                        dom += value + "</div>";
+                        dom += "<input data-type='" + data_type + "' type='radio' class='element " + param_type + "' id='" + value + "' name='" + name + "' value='" + value + "' " + checked + " " + required + ">";
+                        dom += "<label>" + label + "</label></div>";
                     }
 
                 dom += "</div>";
@@ -120,26 +127,49 @@ Schematic = {
             if (element.type === 'multi-choice') {
                 dom += "<tr><td>";
                 label = (typeof element.label !== "undefined") ? element.label : element.name;
+               
+                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
+                dom += "</td>";
+                dom += "<td>";
+                dom += "<div id='multi-choice'>";
+
+                    options = element.options;
+					
+                    for (item in options) {
+						option = options[item];
+                        value = (typeof option.value === 'undefined') ? '' : option.value;
+						name = (typeof option.name === 'undefined') ? 'Undefined Name' : option.name;
+						label = (typeof option.label === 'undefined') ? name : option.label;
+                        checked = (typeof option.checked === 'undefined') ? '' : 'checked';
+						
+						required = (typeof option.required === 'undefined') ? '' : 'required';
+						
+						if (required == "required") {
+							label += "<span class='required'>*</span>";
+						}
+						
+                        dom += "<div class='checkbox'>";
+                        dom += "<input data-type='" + data_type + "' class='element " + param_type + "' type='checkbox' id='" + name + "' name='" + name + "' value='" + value + "' " + checked + " " + required + ">";
+                        dom += "<label>" + label + "</label></div>";
+                    }
+
+                dom += "</div>";
+                dom += "</td><td>";
+            }
+			
+			if (element.type === 'checkbox') {
+                dom += "<tr><td>";
+                label = (typeof element.label !== "undefined") ? element.label : element.name;
                 if (is_required == "required") {
                     label += "<span class='required'>*</span>";
                 }
                 dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
                 dom += "</td>";
                 dom += "<td>";
-                dom += "<div id='" + element.name + "'>";
-
-                    option = element.options
-                    for (item in option) {
-                        value = option[item];
-                        select = (item === element.default) ? 'checked' : '';
-                        dom += "<div class='checkbox'>";
-                        dom += "<input data-type='" + data_type + "' class='element " + param_type + "' type='checkbox' id='" + value + "' name='" + value + "' value='" + item + "' " + select + " " + is_required + ">";
-                        dom += value + "</div>";
-                    }
-
-                dom += "</div>";
+                dom += "<input data-type='" + data_type + "' class='element form-component " + param_type + "' type='checkbox' name='" + element.name + "' value='" + value + "' id='" + element.name + "' " + is_required + ">";
                 dom += "</td><td>";
             }
+			
             if (element.type === 'text') {
                 dom += "<tr><td>";
                 label = (typeof element.label !== "undefined") ? element.label : element.name;
@@ -149,7 +179,7 @@ Schematic = {
                 dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
                 dom += "</td>";
                 dom += "<td>";
-                dom += "<input data-type='" + data_type + "' class='element form-component " + param_type + "' type='text' name='" + element.name + "' id='" + element.name + "' " + is_required + ">";
+                dom += "<input data-type='" + data_type + "' class='element form-component " + param_type + "' type='text' name='" + element.name + "' id='" + element.name + "' value='" + value + "' " + is_required + ">";
                 dom += "</td><td>";
             }
             if (element.type === 'email') {
@@ -162,7 +192,7 @@ Schematic = {
                 dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
                 dom += "</td>";
                 dom += "<td>";
-                dom += "<input data-type='email' class='element form-component " + param_type + "' type='email' name='" + element.name + "' id='" + element.name + "' " + is_required + ">";
+                dom += "<input data-type='email' class='element form-component " + param_type + "' type='email' name='" + element.name + "' value='" + value + "' id='" + element.name + "' " + is_required + ">";
                 dom += "</td><td>";
             }
             if (element.type === 'file') {
@@ -198,7 +228,7 @@ Schematic = {
                 dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
                 dom += "</td>";
                 dom += "<td>";
-                dom += "<textarea data-type='" + data_type + "' class='element form-component " + param_type + "' name='" + element.name + "' id='" + element.name + "' " + is_required + "></textarea>";
+                dom += "<textarea data-type='" + data_type + "' class='element form-component " + param_type + "' name='" + element.name + "' id='" + element.name + "' " + is_required + ">" + value + "</textarea>";
                 dom += "</td><td>";
             }
             description = (typeof element.description === 'undefined') ? '' : element.description;
@@ -250,13 +280,28 @@ Schematic = {
             name = $(element).attr('name');
             data_type = $(element).data('type') ? $(element).data('type') : 'string';
             required = $(element).attr('required') ? true : false;
+			
+			chioce = $(element).attr('type') == 'checkbox' || $(element).attr('type') == 'radio'  ? true : false;
+			
             val = $(element).val();
             this.__validate(name, val, data_type, required, element);
+			
+			if (chioce) {
+				if (!$(element).is(':checked')) {
+					continue;
+				}
+			} 
+					
             if ($(element).hasClass('form')) {
+								
                 if (use_form_object) {
-                    formData.append(name, val);
+					
+				    formData.append(name, val);
+					
                 } else {
-                    formData[name] = val;
+					
+					formData[name] = val;
+					
                 }
             }
             if ($(element).hasClass('path')) {
@@ -371,6 +416,35 @@ Schematic = {
                     this.__errors.push({field: name, message: 'The ' + name + ' must be valid string value.'});
                 }
                 break;
+			case 'json':
+				 try {
+					JSON.parse(value);
+				} catch (e) {
+					this.__errors.push({field: name, message: 'The ' + name + ' must be valid json.'});
+				}
+				
+			break;
+			
+			case 'url':{
+				if (!value.match(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/)) {
+					this.__errors.push({field: name, message: 'The ' + name + ' must be valid url.'});
+				}
+			}
+			
+			case 'date':
+				//formatDate = $(fieldObject).data('format');
+				
+				//splitdate = formatDate.split('-');
+				//if (count(splitdate) <= 0) {
+					//splitdate = formatDate.split('/');
+				//}
+					/* 
+					this section is under development
+					*/
+				
+				//pattren = "/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/";
+				
+			break;
         }
     },
     __showErrors: function(form) {
@@ -403,7 +477,7 @@ Schematic = {
     __sendRequest: function(url, method, formdata, query_params, button, form_object) {
         $(button).html("<span class='ajax-loader'></span>");
         $(button).removeClass("try-it");
-        query_string = (typeof query_params === 'undefined' || query_params === false) ? '' : "?" + query_params;
+        query_string = (typeof query_params === 'undefined' || query_params === false || query_params === "") ? '' : "?" + query_params;
         if (!form_object) {
             content_type = true;
             process_data = true;
