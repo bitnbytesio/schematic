@@ -1,6 +1,6 @@
-# Schematic
+# Schematic (Alpha 1)
 
-Schematic is usefull in **rest api development**. it providing an easier and expressive way to create api help page. The schematic is specialy designed for [Laravel framework](http://laravel.com), but you can use it with any tool or even in core projects.
+Schematic is usefull in **rest api development**. it providing an easier and expressive way to create api help page. 
 
 ## Requirements
 
@@ -16,49 +16,78 @@ Schematic is usefull in **rest api development**. it providing an easier and exp
 ## Code Examples
 
 ```javascript
+
+var page = [
+
+    {
+        title: 'Login',
+        description: 'Login sample request',
+        action: '/auth/login',
+        method: 'post',
+        data: [
+            {
+                type: 'email',
+                name: 'email',
+                description: 'Enter your email',
+                param_type: 'form',
+                data_type: 'email',
+                required: true
+            },
+            {
+                type: 'password',
+                name: 'password',
+                description: 'Enter your password',
+                param_type: 'form',
+                required: true
+            }
+
+        
+        ]
+    },
+
+    {
+        title: 'Register',
+        description: 'Create a new account',
+        action: '/auth/register',
+        method: 'post',
+        data: [
+            {
+                type: 'email',
+                name: 'email',
+                description: 'Enter your email',
+                param_type: 'form',
+                data_type: 'email',
+                required: true
+            },
+            {
+                type: 'password',
+                name: 'password',
+                description: 'Enter your password',
+                param_type: 'form',
+                required: true
+            }
+        ]
+    },
+
+   
+
+   
+
+
+];
+
+
+
 // create page config
-var config = {
-                title: 'Schematic Api v1.2',
-                description: 'World Open Source Development Association (WOSDA)',
-                url: 'http://example.com/api/v1'
-              };
-              
-Schematic.init(config);
+  var schematic = new SchematicPlugin({
+        title: "Schematic v2.0",
+        url: "http://localhost/schematic",
+        api: "http://localhost/api",
+        subTitle: "Api Documentation"
+    });
 
-// create page sections
-var section1 = {
-                  title: 'Login',
-                  description: 'Login sample request',
-                  action: '/login',
-                  method: 'post',
-                  data: [
-                    {
-                      type: 'email', name: 'email', decription: 'Enter your email', param_type: 'form', data_type: 'email'
-                    },
-                    {
-                      type: 'password', name: 'password', decription: 'Enter your pasword', param_type: 'form', data_type: 'alpha_num'
-                    },
-                    {
-                      type: 'options', name: 'role', decription: 'Select your role', param_type: 'form', data_type: 'numeric', 'options': { '1':'admin', '2':'editor', '3':'contributor' }
-                    }
-                  ]
-                };
-                
-var section2 = {
-                  title: 'Logout',
-                  description: 'Logout sample request',
-                  action: '/logout',
-                  method: 'get',
-                  data: [
-                    {
-                      type: 'text', name: 'key', decription: 'Enter your api key', param_type: 'form'
-                    }
-                  ]
-                };
+    schematic.init(page);
 
-Schematic.create([section1, section2]);
-
-// Note: same syntaxt ie is used in options filed should be on field type choice and multi-choise ('options': { '1':'admin', '2':'editor', '3':'contributor' })
 
 ```
 
@@ -79,8 +108,5 @@ Schematic.create([section1, section2]);
 - password (fo input type password)
 - textarea (for textarea element)
 
-## Contributing
-
-Contributions to the **Schematic** are welcome.
 
 Copyright 2015 [WOSD](http://facebook.com/)

@@ -1,6 +1,6 @@
 /* 
  * @project Schematic
- * @version 1.4
+ * @version 2.0
  * @author Harcharan Singh
  * @git: https://github.com/artisangang/schematic
  */
@@ -17,6 +17,12 @@ body {
 *, *:before, *:after {
     box-sizing: border-box;
 }
+.schematic-page {
+    margin-top: 80px;
+}
+#schematic-dom b, strong {
+    font-weight: 500;
+}
 #schematic-dom, #schematic-dom table {
     float: left;
     width: 100%;
@@ -27,9 +33,14 @@ body {
     border-collapse: collapse;
     border-spacing: 0px;
 }
+#schematic-dom th {
+    font-weight: 500;
+    border-bottom: 1px solid #D5D5D5;
+}
 #schematic-dom th,#schematic-dom td {
     text-align: left;
     padding: 5px;
+    font-size: 13px;
 }
 #schematic-dom button, #schematic-dom input[type="button"], #schematic-dom input[type="reset"], #schematic-dom input[type="submit"] {
     cursor: pointer;
@@ -60,7 +71,7 @@ body {
     display: inline-block;
     max-width: 100%;
     margin-bottom: 5px;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 #schematic-dom #multi-choice label, #schematic-dom #choice label {
@@ -129,7 +140,7 @@ body {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
     position: inherit;
-	min-width: 250px;
+	min-width: 100px;
 }
 #schematic-dom .radio, #schematic-dom .checkbox {
     position: relative;
@@ -158,7 +169,7 @@ body {
 }
 #schematic-dom .page-heading {
     color: #333;
-    background-color: #F5F5F5;
+    background-color: #eaeaea;
     border-color: #DDD;
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
@@ -222,7 +233,7 @@ body {
     display: none;
 }
 #schematic-dom .form-table {
-    min-width: 640px;
+    min-width: 768px;
 }
 #schematic-dom .section-get {
     border-color: #D6E9C6;
@@ -304,13 +315,17 @@ body {
 #schematic-dom .key { color: red; }
 
 #schematic-dom .ajax-loader {
-    background: url(../images/ajax-loader.gif) center no-repeat #fff;
+    background: url(ajax-loader.gif) center no-repeat #fff;
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0px;
     line-height: 1.42857;
     text-align: center;
     border: 1px solid transparent;
+    float: right;
+    height: 20px;
+    margin-top: 10px;
+    width: 200px;
 }
 
 #schematic-dom .required {
@@ -322,3 +337,22 @@ body {
 .boolean { color: blue; }
 .null { color: magenta; }
 .key { color: red; }
+
+#schematic-dom .parameters {
+    max-width: 100px;
+}
+#schematic-dom .parameter-types, #schematic-dom .data-types {
+    max-width: 80px;
+}
+#schematic-dom .values {
+    max-width: 300px;
+}
+#schematic-dom .descriptions {
+     min-width: 200px;
+}
+
+#schematic-dom input[type='file'] {
+    border: none;
+    box-shadow: none;
+    padding-bottom: 25px;
+}
