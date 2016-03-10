@@ -118,6 +118,8 @@ SchematicPlugin.prototype._prepare = function (object) {
 
     var formData = {};
 
+    var headers = {};
+
     if (use_form_object) {
         formData = new FormData();
     }
@@ -178,6 +180,10 @@ SchematicPlugin.prototype._prepare = function (object) {
                 query += name + "=" + val + "&";
             }
 
+            if ($(element).hasClass('header')) {
+                headers[name] = val;
+            }
+
         } // loop ends here
     } // items length condition
 
@@ -201,11 +207,11 @@ SchematicPlugin.prototype._prepare = function (object) {
         url += '?' + query_string;
     }
 
-    this._sendRequest(url, method, formData, object);
+    this._sendRequest(url, method, formData, object, headers);
 
 }
 
-SchematicPlugin.prototype._sendRequest = function (url, method, formData, button) {
+SchematicPlugin.prototype._sendRequest = function (url, method, formData, button, requestHeaders) {
 
 
     var instance = this;
@@ -238,6 +244,7 @@ SchematicPlugin.prototype._sendRequest = function (url, method, formData, button
         url: url,
         method: method,
         data: formData,
+        headers:requestHeaders,
         contentType: content_type,
         processData: process_data,
         success : function (response, status, xhr) {
@@ -325,6 +332,7 @@ SchematicPlugin.prototype._injectParams = function (action, params) {
     }
     return build.replace("//", "/");
 }
+
 
 SchematicPlugin.prototype._showErrors = function (target) {
     for (var index in this._errors) {
