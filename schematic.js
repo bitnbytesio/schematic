@@ -1,398 +1,289 @@
-/* 
- * @project Schematic
- * @version 1.0
- * @author Harcharan Singh
- * @git: https://github.com/artisangang/schematic
- */
+ 'use strict';
+var schematic = (function () { 'use strict'
 
-if ("undefined" === typeof jQuery)
-    throw new Error("Action Ajax JavaScript requires jQuery to work");
+    var ver = '3.0';
 
-var Schematic = Schematic || {};
-Schematic = {
-    init: function(config) {
-        this.__errors = [];
-        this.config = {
-            title: typeof config.title !== 'undefined' ? config.title : 'Schematic v1.0',
-            description: typeof config.description !== 'undefined' ? config.description : 'Rest Api development',
-            url: typeof config.url !== 'undefined' ? config.url : window.location,
-            container: typeof config.container !== 'undefined' ? config.container : 'body'
-        };
-        window.onload = function() {
-            Schematic.__createSchematicStage();
-            $("#schematic").html(Schematic.__page);
-            $(document).on('click', '.section-heading', function() {
-                target = $(this).data('body');
-                $(target).slideToggle();
-            });
-            $(document).on('click', '.try-it', function() {
-                Schematic.__prepare($(this));
-            });
-        };
-    },
-    create: function(object) {
-        dom = '<div class="sections">';
-        dom += '<p>' + this.config.description + '</p>';
-        for (section in object) {
-            dom += this.__createDom(object[section], (section + 1));
-        }
-        dom += '<div>';
-        this.__page = dom;
-    },
-    about: function() {
-        alert('Schematic 1.0 \r\n Author: Harcharan Singh');
-    },
-    __createSchematicStage: function() {
-        dom = '<div class="container-fluid" id="schematic-dom">';
-        dom += '<div class="section page">';
-        dom += '<div class="page-heading">' + this.config.title + '</div>';
-        dom += '<div class="page-body" id="schematic">';
-        dom += '</div></div></div>';
-        $(this.config.container).html(dom);
-    },
-    __createDom: function(object, section) {
-        method = (typeof object.method === 'undefined') ? 'get' : object.method;
-        action = (typeof object.action === 'undefined') ? '' : object.action;
-        dom = '<div class="section section-' + method + '">';
-        dom += '<div class="section-heading" data-body="#section-' + section + '">' + object.title + '<span class="method">' + method + '</span><span class="action">' + object.action + '</span></div>';
-        dom += '<div class="section-body" id="section-' + section + '">';
-        dom += '<div class="pad-20">';
-        dom += '<p><strong>Description: </strong>' + object.description + '</p>';
-        dom += '<form id="form-' + section + '" data-method="' + method + '" data-action="' + action + '">';
-        dom += "<table class='form-table'><tr><th>Parameters</th><th>Values</th><th>Description</th><th>Parameter Type</th><th>Data Type</th></tr>";
-        for (elementIndex in object.data) {
-            element = object.data[elementIndex];
-            param_type = (typeof element.param_type === 'undefined') ? 'form' : element.param_type;
-            data_type = (typeof element.data_type === 'undefined') ? 'string' : element.data_type;
-            if (element.type === 'options') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<select data-type='" + data_type + "' class='form-component element " + param_type + "' name='" + element.name + "' id='" + element.name + "'>";
-                for (optionIndex in element.options) {
-                    option = element.options[optionIndex];
-                    for (item in option) {
-                        select = (item === element.default) ? 'selected' : '';
-                        dom += "<option value='" + item + "' " + select + ">";
-                        dom += option[item];
-                        dom += "</option>";
-                    }
-                }
-                dom += "</select>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'choice') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<div id='" + element.name + "'>";
-                for (optionIndex in element.options) {
-                    option = element.options[optionIndex];
-                    for (item in option) {
-                        value = option[item];
-                        select = (value === element.default) ? 'checked' : '';
-                        dom += "<div class='radio'>";
-                        dom += "<input data-type='" + data_type + "' type='radio' class='element " + param_type + "' id='" + value + "' name='" + element.name + "' value='" + item + "' " + select + ">";
-                        dom += value + "</div>";
-                    }
-                }
-                dom += "</div>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'multi-choice') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<div id='" + element.name + "'>";
-                for (optionIndex in element.options) {
-                    option = element.options[optionIndex];
-                    for (item in option) {
-                        value = option[item];
-                        select = (item === element.default) ? 'checked' : '';
-                        dom += "<div class='checkbox'>";
-                        dom += "<input data-type='" + data_type + "' class='element " + param_type + "' type='checkbox' id='" + value + "' name='" + value + "' value='" + item + "' " + select + ">";
-                        dom += item + "</div>";
-                    }
-                }
-                dom += "</div>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'text') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<input data-type='" + data_type + "' class='element form-component " + param_type + "' type='text' name='" + element.name + "' id='" + element.name + "'>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'email') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<input data-type='email' class='element form-component " + param_type + "' type='email' name='" + element.name + "' id='" + element.name + "'>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'file') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<input class='element form-component form' type='file' name='" + element.name + "' id='" + element.name + "'>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'password') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<input data-type='" + data_type + "' class='element form-component " + param_type + "' type='password' name='" + element.name + "' id='" + element.name + "'>";
-                dom += "</td><td>";
-            }
-            if (element.type === 'textarea') {
-                dom += "<tr><td>";
-                label = (typeof element.label !== "undefined") ? element.label : element.name;
-                dom += "<label>" + label !== false ? label : '&nbsp;' + "</label>";
-                dom += "</td>";
-                dom += "<td>";
-                dom += "<textarea data-type='" + data_type + "' class='element form-component " + param_type + "' name='" + element.name + "' id='" + element.name + "'></textarea>";
-                dom += "</td><td>";
-            }
-            description = (typeof element.description === 'undefined') ? '' : element.description;
-            dom += description;
-            dom += "</td><td>";
-            dom += param_type;
-            dom += "</td><td>";
-            dom += data_type;
-            dom += "</td></tr>";
-        }
-        dom += "<tr><th colspan='5'><button data-form='#form-" + section + "' type='button' class='try-it schematic-btn btn-" + method + "'>Try it!</button</th></tr>";
-        dom += "</table></form><div class='response-container'></div></div></div></div>";
-        return dom;
-    },
-    __injectParams: function(action, params) {
-        var match = new RegExp("^{+[A-Za-z0-9_]+}+$", 'gm');
-        action_array = action.split('/');
-        build = "";
-        param_index = 0;
-        for (i = 1; i < action_array.length; i++) {
-            if (match.test(action_array[i])) {
-                build += "/" + params[param_index];
-                param_index++;
-            } else {
-                build += "/" + action_array[i];
-            }
-        }
-        return build;
-    },
-    __prepare: function(object) {
+    var applications = {};
+    var registryCollection = {};
 
-        query = '';
-        target = $(object).data('form');
-        use_form_object = $(target).data('method') === 'get' ? false : true;
-        this.__object = target;
-        $(target).find('.has-error').removeClass('has-error');
-        $(target).find('.error').remove();
-        items = $(target).find('.element').length;
-        if (use_form_object) {
-            formData = new FormData();
-        } else {
-            formData = {};
-        }
-        params = [];
-        for (i = 0; i < items; i++) {
-            element = $(target).find('.element')[i];
-            name = $(element).attr('name');
-            data_type = $(element).data('type') ? $(element).data('type') : 'string';
-            required = $(element).attr('required') ? true : false;
-            val = $(element).val();
-            this.__validate(name, val, data_type, required);
-            if ($(element).hasClass('form')) {
-                if (use_form_object) {
-                    formData.append(name, val);
-                } else {
-                    formData[name] = val;
-                }
-            }
-            if ($(element).hasClass('path')) {
-                params.push(val);
-            }
-            if ($(element).hasClass('query')) {
-                query += name + "=" + val + "&";
-            }
-        }
-        if (this.__errors.length > 0) {
-            this.__showErrors(target);
-            return false;
-        }
-        action = $(target).data('action');
-        if (params.length > 0) {
-            action = this.__injectParams(action, params);
-        }
-        url = Schematic.config.url + action;
-        method = $(target).data('method');
-        query_string = (query.length < 0) ? false : query.substring(0, (query.length - 1));
+    var serviceProviders = {};
 
-        this.__sendRequest(url, method, formData, query_string, object, use_form_object);
-    },
-    __validate: function(name, value, type, is_required) {
 
-        required = typeof is_required === 'undefined' ? false : is_required;
-        if (required) {
-            val_check = value.replace(/^\s+|\s+$/gm, '');
-            if (val_check.length <= 0) {
-                this.__errors.push({field: name, message: 'The ' + name + ' is required.'});
-            }
-        }
-        switch (type) {
-            case 'email':
-                var email_pattren = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                var match = new RegExp(email_pattren);
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' must be valid email.'});
-                }
-                break;
-            case 'int':
-            case 'numeric':
-                var match = new RegExp("^[0-9]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' must be valid numeric value.'});
-                }
-                break;
-            case 'float':
-                var match = new RegExp("^[0-9]+\.[0-9]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' must be valid float value.'});
-                }
-                break;
-            case 'alpha_num':
-                var match = new RegExp("^[A-Za-z0-9_]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' only conatiner alphanumeric characters.'});
-                }
-                break;
-            case 'alpha_dashnum':
-                var match = new RegExp("^[A-Za-z0-9-_]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' only conatiner alphanumeric, underscore(_) or dash(-) characters.'});
-                }
-                break;
-            case 'alphadash':
-                var match = new RegExp("^[A-Za-z-]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' only conatiner alpha or dash(-) characters.'});
-                }
-                break;
-            case 'alpha_':
-                var match = new RegExp("^[A-Za-z_]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' only conatiner alpha or underscore(_) characters.'});
-                }
-                break;
-            case 'alphanum':
-                var match = new RegExp("^[A-Za-z0-9]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' only conatiner alphanumeric characters.'});
-                }
-                break;
-            case 'alpha':
-                var match = new RegExp("^[A-Za-z]+$", 'gm');
-                if (!match.test(value))
-                {
-                    this.__errors.push({field: name, message: 'The ' + name + ' only conatiner alpha characters.'});
-                }
-                break;
-        }
-    },
-    __showErrors: function(form) {
-        for (index in this.__errors) {
-            error = this.__errors[index];
-            input = $(form).find("#" + error.field);
-            $(input).parent().addClass('has-error');
-            $(input).after("<p class='error'>" + error.message + "</p>");
-        }
-        this.__errors = [];
-    },
-    __syntaxHighlight: function(json) {
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-            var cls = 'number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key';
-                } else {
-                    cls = 'string';
-                }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean';
-            } else if (/null/.test(match)) {
-                cls = 'null';
-            }
-            return '<span class="' + cls + '">' + match + '</span>';
-        });
-    },
-    __sendRequest: function(url, method, formdata, query_params, button, form_object) {
-        $(button).html("<span class='ajax-loader'></span>");
-        $(button).removeClass("try-it");
-        query_string = (typeof query_params === 'undefined' || query_params === false) ? '' : "?" + query_params;
-        if (!form_object) {
-            content_type = true;
-            process_data = true;
-        } else
-        {
-            content_type = false;
-            process_data = false;
-        }
-        $.ajax({
-            url: url + query_string,
-            type: method,
-            data: formdata,
-            contentType: content_type,
-            processData: process_data
-        }).done(function(response, status, xhr) {
-            for (index in response.errors) {
-                error = response.errors[index];
-                input = $(Schematic.__object).find("#" + index);
-                $(input).parent().addClass('has-error');
-                $(input).after("<p class='error'>" + error + "</p>");
-            }
-            dom = '<div class="action-url"><strong>URL: </strong>' + url + query_string + '</div>';
-            dom += '<div class="status-code"><strong>Status : </strong>' + xhr.status + '</div>';
-            dom += '<div class="response-body"><pre>';
-            dom += Schematic.__syntaxHighlight(JSON.stringify(response, null, 2));
-            dom += '</pre></div>';
-            container = $(Schematic.__object).next().html(dom);
-            $(button).text('Try it!');
-            $(button).addClass("try-it");
-        }).fail(function(xhr, status, error) {
-            response = xhr.responseJSON;
-            dom = '<div class="action-url"><strong>URL: </strong>' + url + query_string + '</div>';
-            dom += '<div class="status-code"><strong>Status : </strong>' + xhr.status + '</div>';
-            dom += '<div class="response-body"><pre>';
-            dom += Schematic.__syntaxHighlight(JSON.stringify(response, null, 2));
-            dom += '</pre></div>';
-            container = $(Schematic.__object).next().html(dom);
-            $(button).text('Try it!');
-            $(button).addClass("try-it");
+    function initialized(name, config) {
 
-        });
+        this.name = name;
+        this.dom = null;
+        this.config = config;
+        this._booted = false;
+        this._models = {};
+       
     }
-};
+
+    initialized.prototype.init = function (  obj ) {
+
+       dependencyResolver( obj, getService, this );
+
+    }; 
+
+    initialized.prototype.model = function (name, object) {
+
+        if (this.config.routable) console.info('Application will not use ['+name+'] model in routable mode.');
+
+        this._models[name] = object;
+        
+    };
+
+
+    // create new application
+    function application(name, config) {
+
+        if (typeof applications[name] !== 'undefined') return applications[name];
+
+        return applications[name] = new initialized( name, config );
+    }
+
+    // dependency resolver
+    function dependencyResolver( args, provider, extras ) {
+
+
+
+        var injections = [];
+
+        var func;
+
+        for (var i in args) {
+
+            var key = args[i]; 
+
+             if (typeof key == 'function') {
+                func = key;
+            } else {
+
+                injections.push( provider(key, extras) );
+                
+            }
+
+        }
+
+        if (typeof func != 'function') throw new Error('Invalid object in injector.');
+
+        return func.apply(func, injections);
+
+    }
+
+    // dependency injector
+    function dependencyInjector( args ) {
+
+        return dependencyResolver(args, getModule);
+
+    }
+
+    // get module by key
+    function getModule ( key ) {
+
+
+        if (typeof key == 'string' && typeof registryCollection[key] != 'undefined') {
+             
+                if (typeof registryCollection[key] === 'function') {
+                    var funcName = registryCollection[key.replace('@', '')];
+                    return new registryCollection[key]();
+                  
+                } else {
+                    return registryCollection[key];
+                }
+                
+               
+        } else {
+            throw new Error('Unknown reference '+key+' in injector.');
+        }
+
+    }
+
+    // get service provider by key
+    function getService(key, extras) {
+
+
+        
+        if (typeof key == 'string' && typeof serviceProviders[key] != 'undefined') {
+
+            if (typeof extras != 'undefined') {
+                serviceProviders[key].app = extras;
+            }
+
+            return serviceProviders[key];
+               
+        } else {
+            throw new Error('Unknown service provider '+key+' in injector.');
+        }
+
+    }
+
+    // get dependency by key
+    function getDependency(key) {
+
+        if (key.indexOf('@') == 0) {
+            return getModule(key);
+        }
+
+        if (key.indexOf('#') == 0) {
+            return getService(key);
+        }
+
+        throw new Error('Invalid dependency ' + key + '.');
+
+    }
+
+
+
+    // collection object
+
+    function registry( key, func ) {
+        registryCollection['@' + key] = func;
+    } 
+
+    // service provider colections
+    function registerServiceProvider( key, func ) {
+
+        if (typeof func != 'function' && !(func instanceof Array) ) throw new Error('Invalid Service provider '+key+' found.'); 
+
+
+        if (typeof serviceProviders[key] != 'undefined') throw new Error('Service provider with name '+key+' already exists.'); 
+
+        if (func instanceof Array) {
+            serviceProviders['#' + key] = dependencyResolver(func, getDependency);
+        } else {
+            serviceProviders['#' + key] = func();
+        }
+    }
+
+
+    // information
+
+    function infoAndAbout() {
+
+    }
+
+   
+
+    function draw(app, model) {
+        
+        var $decorator = getModule('@decorator');
+
+        for (var p in model) {
+
+            var formId = app.name + ' ' + model[p].title;
+            var appIdentity = formId.slug();
+
+
+            var fields = model[p].data;
+
+            var tbody = [];
+
+            for (var iField in fields) {
+                var field = fields[iField];
+
+                var trow = [field.name];
+
+                if (field.type == 'text' || field.type == 'password' || field.type == 'file' || field.type == 'email') {
+                    var text = $decorator.element('input', {type:field.type, name: field.name}).get();
+                    trow.push(text);
+                }
+
+                trow.push(field.description || '');
+                trow.push(field.param_type || 'string');
+                trow.push(field.data_type || 'string');
+
+                tbody.push(trow);
+
+            }
+
+            var button = $decorator.element('button', {class:'schematic-btn', onclick:'', 'data-target':appIdentity }).text('Try Now').get();
+
+            var t = $decorator.table({});
+            
+            t.header(['Parameter', 'Value', 'Description', 'Parameter Type', 'Data Type']);
+            
+            t.tbody(tbody);
+
+            t.footer([{html: button, colSpan:5}], true);
+            
+            var table =  t.get();
+            
+            var method = $decorator.element('span', {class:'method'}).text((page[p].method || 'get')).get();
+            var action = $decorator.element('span', {class:'action'}).text((page[p].action || '/')).get();
+
+            var bar = $decorator.element('div', {class:'heading'}).text((page[p].title || '')).get();
+            bar.appendChild(method);
+            bar.appendChild(action);
+
+            var d = $decorator.element('div', {class:'panel ' + (page[p].method || 'get') }).get();
+            d.appendChild(bar);
+
+            var b = $decorator.element('div', {class: 'body collapsey'}).get();
+
+            var container = $decorator.element('div', {class: 'body-content'}).get();
+
+            var form = $decorator.element('form', {class: 'schematic-form', id: appIdentity}).get();
+            form.appendChild(table);
+
+            container.appendChild(form);
+            b.appendChild(container);
+
+            d.appendChild(b);
+
+            app.dom.appendChild(d);
+        }
+
+    }
+
+    registry('stage', {draw: draw});
+
+   
+    // boot application by attributes
+    document.addEventListener( "DOMContentLoaded", function(){
+        document.removeEventListener( "DOMContentLoaded", this, false );
+
+        for (var n in applications) {
+            var nodList = document.querySelectorAll('[data-schematic="'+n+'"]');
+
+            if (nodList.length) {
+
+                 // in case of same application already exists   
+                 if (nodList.length > 1 ) console.info('Duplicate application reference found in dom.');
+
+                 run(n, nodList[0]);
+            }
+        }
+
+    });
+
+   
+     // boot application
+    function run( name, element ) {
+
+
+        if (!(element instanceof Node)) throw new Error('Invalid application '+ name +' dom reference.');
+        
+
+        if (!applications[name] instanceof initialized) throw new Error("Application " + name + " doesn't exists.");
+         
+        if (applications[name]._booted) throw new Error('Application '+ name +' is already running.');
+
+        element.setAttribute('class', (element.getAttribute('class') || '') + ' schematic-dom');
+
+        applications[name].dom = element;
+
+        applications[name]._booted = true;
+
+        var model;
+
+        if (model = element.getAttribute('data-model')) {
+            draw(applications[name], applications[name]._models[model]);
+        }
+                
+    }
+
+    // return child scope objects
+    return { app: application, info: infoAndAbout, injector: dependencyInjector, register: registry, boot: run, get: getModule, service: registerServiceProvider };
+
+})();

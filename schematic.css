@@ -1,0 +1,107 @@
+html {
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #333;
+}
+
+.schematic-table {
+	width: 100%;
+	background-color: transparent;
+    border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+.schematic-table thead tr {
+    font-weight: 500;
+    border-bottom: 1px solid #D5D5D5;
+}
+
+.schematic-table td {
+    text-align: left;
+    padding: 5px;
+    font-size: 13px;
+}
+
+.schematic-dom button, .schematic-dom input[type="button"], .schematic-dominput[type="reset"], .schematic-dom input[type="submit"] {
+    cursor: pointer;
+}
+
+.schematic-dom .panel {
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  float: left;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.schematic-dom .get {
+  border-color: #d6e9c6;
+}
+
+.schematic-dom .post {
+  border-color: #337ab7;
+}
+
+.schematic-dom .heading {
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  padding: 10px 15px;
+  text-transform: capitalize;
+}
+
+.schematic-dom .get > .heading {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+
+.schematic-dom .post > .heading {
+  background-color: #337ab7;
+  border-color: #337ab7;
+  color: #fff;
+}
+
+.schematic-dom .heading > span {
+  border-left: 1px solid;
+  float: right;
+  font-size: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.schematic-dom .heading > span.method {
+  text-transform: uppercase;
+}
+
+.schematic-dom .body {
+  float: left;
+  width: 100%;
+}
+
+.schematic-dom .body-content {
+  padding: 20px;
+}
+
+/* animations */
+.schematic-dom .collapsing {
+    position: relative;
+    height: 0;
+	opacity:0;
+    overflow: hidden;
+	-webkit-transition: height,opacity 0.35s ease;
+	-o-transition: height,opacity 0.35s ease;
+	transition: height,opacity 0.35s ease;
+}
+
+.schematic-dom .collapse {
+    display: none;
+}
+
+.schematic-dom .collapse.in {
+    display: block;
+	opacity:1;
+}

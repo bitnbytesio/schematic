@@ -1,0 +1,68 @@
+schematic.injector(['@decorator', function ($decorator) { 
+
+	for (var p in page) {
+
+		var formId = myApp.name + ' ' + page[p].title;
+		var appIdentity = formId.slug();
+
+	
+		var fields = page[p].data;
+
+		var tbody = [];
+
+		for (var iField in fields) {
+			var field = fields[iField];
+
+			var trow = [field.name];
+
+			if (field.type == 'text' || field.type == 'password' || field.type == 'file' || field.type == 'email') {
+				var text = $decorator.element('input', {type:field.type, name: field.name}).get();
+				trow.push(text);
+			}
+
+			trow.push(field.description || '');
+			trow.push(field.param_type || 'string');
+			trow.push(field.data_type || 'string');
+
+			tbody.push(trow);
+
+		}
+
+		var button = $decorator.element('button', {class:'schematic-btn', onclick:'', 'data-target':appIdentity }).text('Try Now').get();
+
+		var t = $decorator.table({});
+		
+		t.header(['Parameter', 'Value', 'Description', 'Parameter Type', 'Data Type']);
+		
+		t.tbody(tbody);
+
+		t.footer([{html: button, colSpan:5}], true);
+		
+		var table =  t.get();
+		
+		var method = $decorator.element('span', {class:'method'}).text((page[p].method || 'get')).get();
+		var action = $decorator.element('span', {class:'action'}).text((page[p].action || '/')).get();
+
+		var bar = $decorator.element('div', {class:'heading'}).text((page[p].title || '')).get();
+		bar.appendChild(method);
+		bar.appendChild(action);
+
+		var d = $decorator.element('div', {class:'panel ' + (page[p].method || 'get') }).get();
+		d.appendChild(bar);
+
+		var b = $decorator.element('div', {class: 'body collapsey'}).get();
+
+		var container = $decorator.element('div', {class: 'body-content'}).get();
+
+		var form = $decorator.element('form', {class: 'schematic-form', id: appIdentity}).get();
+		form.appendChild(table);
+
+		container.appendChild(form);
+		b.appendChild(container);
+
+		d.appendChild(b);
+
+		document.getElementById('doc').appendChild(d);
+	}
+
+}]);
