@@ -209,14 +209,14 @@ var schematic = (function () { 'use strict'
             
             var table =  t.get();
             
-            var method = $decorator.element('span', {class:'method'}).text((page[p].method || 'get')).get();
-            var action = $decorator.element('span', {class:'action'}).text((page[p].action || '/')).get();
+            var method = $decorator.element('span', {class:'method'}).text((model[p].method || 'get')).get();
+            var action = $decorator.element('span', {class:'action'}).text((model[p].action || '/')).get();
 
-            var bar = $decorator.element('div', {class:'heading'}).text((page[p].title || '')).get();
+            var bar = $decorator.element('div', {class:'heading'}).text((model[p].title || '')).get();
             bar.appendChild(method);
             bar.appendChild(action);
 
-            var d = $decorator.element('div', {class:'panel ' + (page[p].method || 'get') }).get();
+            var d = $decorator.element('div', {class:'panel ' + (model[p].method || 'get') }).get();
             d.appendChild(bar);
 
             var b = $decorator.element('div', {class: 'body collapsey'}).get();

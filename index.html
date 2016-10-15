@@ -11,7 +11,7 @@
 <body>
 
 
-<div data-schematic="myApp"></div>
+<div data-schematic="myApp" data-model="user"></div>
 
 
 
@@ -32,14 +32,9 @@
 var myApp = schematic.app('myApp', {endpoint: 'http://localhost/app'});
 
 
+myApp.model('user', page);
 
 /*
-myApp.modelFiles({
-	user: 'https://howwefundit.com/assets/js/api/user.js'
-});
-*/
-
-
 myApp.init(['#router', function ($r) {
 
 	$r.url('https://howwefundit.com/assets/js/api/');
@@ -48,14 +43,13 @@ myApp.init(['#router', function ($r) {
 
 	$r.html5(false);
 
-	$r.on('user', 'http://localhost/t/as/user.js');
+	$r.on('user', 'http://localhost/schematic/user.js');
 
 	$r.default('user');
 
 	
 }]);
-
-
+*/
 
 /*
  for mannually booting
