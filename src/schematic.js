@@ -1,30 +1,52 @@
  'use strict';
-var schematic = (function () { 'use strict'
+var schematic = (function () {
 
+    // application version
     var ver = '3.0';
 
+    // collection of application created by user
     var applications = {};
+
+    // collection of registered objects, plugins
     var registryCollection = {};
 
+    // collection of service providers
     var serviceProviders = {};
 
 
+    // main application constructor
     function initialized(name, config) {
 
+        // store name of the application
         this.name = name;
+
+        // element in which application will be displayed
         this.dom = null;
+
+        // application config
         this.config = config;
+
+        // booted will set to true, after application configured and ready to use
         this._booted = false;
+
+        // collection of models used in application
         this._models = {};
+
+        // collection of service providers used in application, later we will boot all service providers once application is ready
+        this._services = [];
        
     }
 
+    // all service providers will be configured in this container
     initialized.prototype.init = function (  obj ) {
 
-       dependencyResolver( obj, getService, this );
+        // resolve container dependency
+       dependencyResolver( obj, getService, {app: this} );
 
     }; 
 
+
+    // method is used to register model
     initialized.prototype.model = function (name, object) {
 
         if (this.config.routable) console.info('Application will not use ['+name+'] model in routable mode.');
@@ -45,20 +67,22 @@ var schematic = (function () { 'use strict'
     // dependency resolver
     function dependencyResolver( args, provider, extras ) {
 
-
-
+        // collection of known objects, found in registery
         var injections = [];
 
         var func;
 
+
+        // loop through dependency array
         for (var i in args) {
 
             var key = args[i]; 
 
-             if (typeof key == 'function') {
+            // pluck the function from dependency array
+            if (typeof key == 'function') {
                 func = key;
             } else {
-
+                // save current dependency in collection
                 injections.push( provider(key, extras) );
                 
             }
@@ -67,13 +91,15 @@ var schematic = (function () { 'use strict'
 
         if (typeof func != 'function') throw new Error('Invalid object in injector.');
 
+        // call plucked function with all dependencies 
         return func.apply(func, injections);
 
     }
 
-    // dependency injector
+    // module dependency injector
     function dependencyInjector( args ) {
 
+        // calling dependency resolver with module provider
         return dependencyResolver(args, getModule);
 
     }
@@ -102,19 +128,30 @@ var schematic = (function () { 'use strict'
     // get service provider by key
     function getService(key, extras) {
 
-
+        var service;
         
         if (typeof key == 'string' && typeof serviceProviders[key] != 'undefined') {
 
-            if (typeof extras != 'undefined') {
-                serviceProviders[key].app = extras;
+                       
+            var func = serviceProviders[key];
+
+            if (func instanceof Array) {
+                service = dependencyResolver(func, getDependency);
+            } else {
+                service = func();
             }
 
-            return serviceProviders[key];
+            service.meta = extras;
+
+            // save service provider in current app collection to boot it later when application is ready
+            extras.app._services.push(service);
+            
+            return service;            
                
-        } else {
-            throw new Error('Unknown service provider '+key+' in injector.');
-        }
+        } 
+
+        throw new Error('Unknown service provider '+key+' in injector.');
+        
 
     }
 
@@ -136,7 +173,6 @@ var schematic = (function () { 'use strict'
 
 
     // collection object
-
     function registry( key, func ) {
         registryCollection['@' + key] = func;
     } 
@@ -149,37 +185,32 @@ var schematic = (function () { 'use strict'
 
         if (typeof serviceProviders[key] != 'undefined') throw new Error('Service provider with name '+key+' already exists.'); 
 
-        if (func instanceof Array) {
-            serviceProviders['#' + key] = dependencyResolver(func, getDependency);
-        } else {
-            serviceProviders['#' + key] = func();
-        }
-    }
+        serviceProviders['#' + key] = func;
 
-
-    // information
-
-    function infoAndAbout() {
-
-    }
-
-   
-
-    function draw(app, model) {
         
+    }
+
+
+    // draw application in its dom element. this is the main method that converts json into html
+    function draw(app, model) {
+
+        // get decorator module     
         var $decorator = getModule('@decorator');
 
+        // loop throug the model
         for (var p in model) {
 
+            // create unique id for the form element
             var formId = app.name + ' ' + model[p].title;
             var appIdentity = formId.slug();
 
-
+            // get form fields from json
             var fields = model[p].data;
 
             var tbody = [];
 
             for (var iField in fields) {
+
                 var field = fields[iField];
 
                 var trow = [field.name];
@@ -197,45 +228,75 @@ var schematic = (function () { 'use strict'
 
             }
 
+            // create form submit or try now button
             var button = $decorator.element('button', {class:'schematic-btn', onclick:'', 'data-target':appIdentity }).text('Try Now').get();
 
+            // start creating table
             var t = $decorator.table({});
             
+            // table header created
             t.header(['Parameter', 'Value', 'Description', 'Parameter Type', 'Data Type']);
             
+            // insert data into table body    
             t.tbody(tbody);
 
+            // create table footer
             t.footer([{html: button, colSpan:5}], true);
             
+            // get table element instance
             var table =  t.get();
             
+            // create span element to display request method in title bar
             var method = $decorator.element('span', {class:'method'}).text((model[p].method || 'get')).get();
+
+            // create span element to display request path in title bar
             var action = $decorator.element('span', {class:'action'}).text((model[p].action || '/')).get();
 
+            // create title bar
             var bar = $decorator.element('div', {class:'heading'}).text((model[p].title || '')).get();
+
+            // insert method span element in bar
             bar.appendChild(method);
+
+            // insert action span element in bar
             bar.appendChild(action);
 
+            // create the main panel
             var d = $decorator.element('div', {class:'panel ' + (model[p].method || 'get') }).get();
+
+            // insert bar init
             d.appendChild(bar);
 
+            // create panel body
             var b = $decorator.element('div', {class: 'body collapsey'}).get();
 
+
+            // create panel body container
             var container = $decorator.element('div', {class: 'body-content'}).get();
 
+            // create form element
             var form = $decorator.element('form', {class: 'schematic-form', id: appIdentity}).get();
+
+            // insert previously created table in form
             form.appendChild(table);
 
+            // now insert form element in panel body container
             container.appendChild(form);
+
+            // insert panel container in panel body
             b.appendChild(container);
 
-            d.appendChild(b);
+            // insert the panel body in main panel section
+            d.appendChild(b);   
 
+
+            // finish, whole main panel section in application dom
             app.dom.appendChild(d);
         }
 
     }
 
+    // register application creator or drawer
     registry('stage', {draw: draw});
 
    
@@ -251,6 +312,7 @@ var schematic = (function () { 'use strict'
                  // in case of same application already exists   
                  if (nodList.length > 1 ) console.info('Duplicate application reference found in dom.');
 
+                 // lets fire
                  run(n, nodList[0]);
             }
         }
@@ -264,7 +326,6 @@ var schematic = (function () { 'use strict'
 
         if (!(element instanceof Node)) throw new Error('Invalid application '+ name +' dom reference.');
         
-
         if (!applications[name] instanceof initialized) throw new Error("Application " + name + " doesn't exists.");
          
         if (applications[name]._booted) throw new Error('Application '+ name +' is already running.');
@@ -275,6 +336,11 @@ var schematic = (function () { 'use strict'
 
         applications[name]._booted = true;
 
+        for (var i in applications[name]._services) {
+            var service = applications[name]._services[i];
+            service.init();
+        }
+
         var model;
 
         if (model = element.getAttribute('data-model')) {
@@ -284,6 +350,6 @@ var schematic = (function () { 'use strict'
     }
 
     // return child scope objects
-    return { app: application, info: infoAndAbout, injector: dependencyInjector, register: registry, boot: run, get: getModule, service: registerServiceProvider };
+    return { app: application, injector: dependencyInjector, register: registry, boot: run, get: getModule, service: registerServiceProvider };
 
 })();

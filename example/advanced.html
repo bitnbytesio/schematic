@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Schematic v3</title>
+
+	<link href="../build/schematic.css" rel="stylesheet" type="text/css"></link>
+
+
+</head>
+<body>
+
+
+<div data-schematic="myApp"></div>
+
+
+<script src="../build/schematic-min.js"></script>
+
+<script>
+
+
+var myApp = schematic.app('myApp', {endpoint: 'http://localhost/app'});
+
+
+myApp.init(['#router', function ($r) {
+
+	//$r.url('https://example.com/api/js/');
+	
+	$r.fetchMode('eager');
+
+	//$r.html5();
+
+	$r.on('user', 'user.php');
+
+	$r.default('user');
+
+	
+}]);
+
+
+</script>
+
+</body>
+</html>

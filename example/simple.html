@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Schematic v3</title>
+
+	<link href="../build/schematic.css" rel="stylesheet" type="text/css"></link>
+
+
+</head>
+<body>
+
+<div>
+    <h3>Schematic Simple Usage</h3>
+
+    <p>Edit this file for sample code.</p>
+
+    <p>Create Schematic app as shown in code below:</p>
+    <code>
+        <script>
+            var myApp = schematic.app('myApp', {endpoint: 'http://localhost/app'});
+        </script>
+    </code>
+    <p></p>
+
+</div>
+
+
+<div data-schematic="myApp" data-model="user"></div>
+
+<div>Schematic 3.0, 2016.</div>
+
+
+
+<script src="../build/schematic-min.js"></script>
+
+<script>
+
+
+var myApp = schematic.app('myApp', {endpoint: 'http://localhost/app'});
+
+
+myApp.model('user', [{
+
+        title: 'User Dashboard',
+
+        description: '',
+
+        action: '/user/dashboard',
+
+        method: 'get',
+
+        data: [
+
+            {
+
+                type: 'text',
+
+                name: 'X-Access-Token',
+
+                description: 'Enter your api token',
+
+                param_type: 'header',
+
+                data_type: 'string',
+
+                required: true
+
+            },
+
+            {
+
+                type: 'text',
+
+                name: 'with',
+
+                description: 'Enter comma seperated relations (organizations, questions, memberships, profile, profile.member, profile.address, profile.organization)',
+
+                param_type: 'form',
+
+                data_type: 'multi-string'
+
+            }
+
+        ]
+
+    }]);
+
+
+
+/*
+ for mannually booting
+schematic.boot('myApp', document.getElementById('myApp'));
+*/
+
+
+
+/*
+
+sample xml request
+
+var $xhr = schematic.get('@xhr');
+
+$xhr.create('http://localhost/st/index.php', 'post', {name:'Harry', age:'24', members:['sdf', 'afd'], bio: [{'color' : 'red'}, {'sport' : 'cricket'}], types:{'normal' : true, advanced: 'false' }}).then( function (o) {
+		
+	});
+
+	document.addEventListener('xhrSuccess', function (e) {
+		console.log(e);
+		console.log('ajax completed.');
+	});
+
+	document.addEventListener('xhrSuccess', function (e) {
+		console.log('fer to completed.');
+	});
+
+*/
+</script>
+
+</body>
+</html>

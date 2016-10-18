@@ -1,6 +1,7 @@
  'use strict';
  schematic.register('helpers', function () { 
 
+    // convert string to slug
     String.prototype.slug = function () {
         return this.toLowerCase()
             .replace(/[^\w ]+/g, '')
@@ -8,6 +9,7 @@
     }
 
 
+    // convert object to html attributes
     this.toAttributes = function ( i, prefix ) {
         var attributes = [];
         Object.keys(i).map( function (k) {
@@ -16,8 +18,9 @@
         });
 
         return attributes.join(' ');
-    },
+    }
 
+    // serialize object to query string
     this.serializeToQS = function(data, prefix) {
       var str = [];
 
@@ -33,12 +36,9 @@
       }
            
       return str.join("&");
-    },
+    }
 
-    this.tes = function () { 
-  	  alert('heplers working, great!');
-  	}
-   
+    
     return this;
        
 });
