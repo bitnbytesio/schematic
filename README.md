@@ -10,7 +10,7 @@ Schematic is usefull in **rest api development**. it providing an easier and exp
 
 ## Code Examples
 
-Please check index.html for sample code
+Please check example directory for sample code
 
 ## Contributing
 
