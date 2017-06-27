@@ -1,0 +1,9 @@
+@import 'variables';
+@import 'functions';
+
+html {
+    font-family: $font_family;
+    font-size: 100%;
+    line-height: 1.42857;
+    color: color($colors, 'dark');
+}
