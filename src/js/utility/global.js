@@ -1,51 +1,5 @@
 import {set as _setProvider} from 'registry';
 
-// create schematic
-Object.assign(window, {
-	schematic: {}
-});
-
-
-Object.assign(window.schematic, {
-
-	set(object, path, value) {
-
-		
-        var a = path.split('.');
-
-        for (let i = 0; i < a.length - 1; i++) {
-            var n = a[i];
-            if (n in object) {
-                object = object[n];
-            } else {
-                object[n] = {};
-                object = object[n];
-            }
-        }
-        object[a[a.length - 1]] = value;
-    }
-
-});
-
-Object.assign(window.schematic, {
-	
-	get(object, path) {
-        var o = object;
-        path = path.replace(/\[(\w+)\]/g, '.$1');
-        path = path.replace(/^\./, '');
-        var a = path.split('.');
-        while (a.length) {
-            var n = a.shift();
-            if (n in o) {
-                o = o[n];
-            } else {
-                return;
-            }
-        }
-        return o;
-    }
-
-});
 
 // deps decorator
 Object.assign(window, {
