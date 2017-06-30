@@ -1,14 +1,19 @@
-@deps('element', 'table')
+import element from './element';
+
+import table from './table';
+
 export default class draw  {
 
-    constructor(model) {
+    constructor(app) {       
+        this.app = app;               
+    }
 
-
-        // get decorator module     
-        var $decorator = getModule('@decorator');
+    get(model) {
+     
+        let app = this.app;
 
         // loop throug the model
-        for (var p in model) {
+        for (let p = 0; p < model.length; p++) {
 
             // create unique id for the form element
             var formId = app.name + ' ' + model[p].title;
@@ -19,14 +24,14 @@ export default class draw  {
 
             var tbody = [];
 
-            for (var iField in fields) {
+            for (let iField in fields) {
 
                 var field = fields[iField];
 
                 var trow = [field.name];
 
                 if (field.type == 'text' || field.type == 'password' || field.type == 'file' || field.type == 'email') {
-                    var text = $decorator.element('input', {
+                    var text = new element('input', {
                         type:field.type, 
                         name: field.name, 
 
@@ -44,10 +49,10 @@ export default class draw  {
             }
 
             // create form submit or try now button
-            var button = $decorator.element('button', {class:'schematic-btn', onclick:'schematic.tryNow("'+appIdentity+'")', 'data-target':appIdentity }).text('Try Now').get();
+            let button = new element('button', {class:'schematic-btn', onclick:'schematic.tryNow("'+appIdentity+'")', 'data-target':appIdentity }).text('Try Now').get();
 
             // start creating table
-            var t = $decorator.table({});
+            let t = new table();
             
             // table header created
             t.header(['Parameter', 'Value', 'Description', 'Parameter Type', 'Data Type']);
@@ -59,16 +64,16 @@ export default class draw  {
             t.footer([{html: button, colSpan:5}], true);
             
             // get table element instance
-            var table =  t.get();
+            var tableDom =  t.get();
             
             // create span element to display request method in title bar
-            var method = $decorator.element('span', {class:'method'}).text((model[p].method || 'get')).get();
+            var method = new element('span', {class:'method'}).text((model[p].method || 'get')).get();
 
             // create span element to display request path in title bar
-            var action = $decorator.element('span', {class:'action'}).text((model[p].action || '/')).get();
+            var action = new element('span', {class:'action'}).text((model[p].action || '/')).get();
 
             // create title bar
-            var bar = $decorator.element('div', {class:'heading'}).text((model[p].title || '')).get();
+            var bar = new element('div', {class:'heading'}).text((model[p].title || '')).get();
 
             // insert method span element in bar
             bar.appendChild(method);
@@ -77,23 +82,24 @@ export default class draw  {
             bar.appendChild(action);
 
             // create the main panel
-            var d = $decorator.element('div', {class:'panel ' + (model[p].method || 'get') }).get();
+            var d = new element('div', {class:'panel ' + (model[p].method || 'get') }).get();
 
+ 
             // insert bar init
             d.appendChild(bar);
 
             // create panel body
-            var b = $decorator.element('div', {class: 'body collapsey'}).get();
+            var b = new element('div', {class: 'body collapsey'}).get();
 
 
             // create panel body container
-            var container = $decorator.element('div', {class: 'body-content'}).get();
+            var container = new element('div', {class: 'body-content'}).get();
 
             // create form element
-            var form = $decorator.element('form', {class: 'schematic-form', id: appIdentity}).get();
+            var form = new element('form', {class: 'schematic-form', id: appIdentity}).get();
 
             // insert previously created table in form
-            form.appendChild(table);
+            form.appendChild(tableDom);
 
             // now insert form element in panel body container
             container.appendChild(form);
@@ -107,9 +113,8 @@ export default class draw  {
 
             // finish, whole main panel section in application dom
                        
-            app.dom.appendChild(d);
-           
-                
+            app.selector.appendChild(d);
         }
-
     }
+
+}

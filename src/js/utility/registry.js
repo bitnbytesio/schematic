@@ -6,12 +6,12 @@ class registry {
 
     set(path, value) {
 
-        return schematic.set(this._collection, path, value);
+        return array_set(this._collection, path, value);
     }
 
     get(path, value) {
 
-        return schematic.get(this._collection, path, value);
+        return array_get(this._collection, path, value);
     }
 
    

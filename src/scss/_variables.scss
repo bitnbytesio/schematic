@@ -1,5 +1,7 @@
 $font_family: sans-serif;
 
+$base-font-size: 1em;
+
 $colors: (
 	light:#d5d5d5,
 	dark:#333,
@@ -9,4 +11,9 @@ $colors: (
 	delete:#d6e9c6,
 	options:#d6e9c6,
 
+
 );
+
+$panelBackground:#fff;
+$panelBorderColor:transparent;
+$panelBorderRadius:4px;

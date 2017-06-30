@@ -1,9 +1,90 @@
 @import 'variables';
 @import 'functions';
 
-html {
-    font-family: $font_family;
-    font-size: 100%;
-    line-height: 1.42857;
-    color: color($colors, 'dark');
+.schematic-dom {
+	.schematic-table {
+
+		font-family: $font_family;
+	    font-size: 100%;
+	    line-height: 1.42857;
+	    color: color($colors, 'dark');
+
+		width: 100%;
+		background-color: transparent;
+	    border-collapse: collapse;
+		border-spacing: 0px;
+
+		thead {
+			tr {
+			    font-weight: 500;
+			    border-bottom: 1px solid  color($colors, 'light');
+			}
+		}
+
+		td {
+		    text-align: left;
+		    padding: 5px;
+		    font-size: 85%;
+		}
+	}
+
+
+
+	button, input[type="button"], input[type="reset"], input[type="submit"] {
+	    cursor: pointer;
+	}
+
+	.panel {
+	  background-color: $panelBackground;
+	  border: 1px solid $panelBorderColor;
+	  border-radius: $panelBorderRadius;
+	  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+	  float: left;
+	  margin-bottom: 20px;
+	  width: 100%;
+
+
+	  .heading {
+		  border-bottom: 1px solid transparent;
+		  border-top-left-radius: 3px;
+		  border-top-right-radius: 3px;
+		  padding: 10px 15px;
+		  text-transform: capitalize;
+
+		  span {
+			  border-left: 1px solid;
+			  float: right;
+			  font-size: 80%;
+			  padding-left: 5px;
+			  padding-right: 5px;
+			  text-transform: none;
+			}
+	  }
+
+
+
+	}
+
+	.get {
+	  border-color: color($colors, 'get');
+
+		 .heading {
+			  background-color: #dff0d8;
+			  border-color: #d6e9c6;
+			  color: #3c763d;
+		}
+
+	}
+
+	.post {
+	  border-color: color($colors, 'post');
+	}
+
+	.put {
+	  border-color: color($colors, 'put');
+	}
+
+	.delete {
+	  border-color: color($colors, 'delete');
+	}
 }

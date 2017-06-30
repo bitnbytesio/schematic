@@ -1,34 +1,48 @@
 export default class element {
 
+
     constructor(tag, attributes, block) {
 
-        this.e = document.createElement(tag);
+        this.tag = tag;
+        this.attributes = attributes;
+        this.block = block;    
 
-        if (typeof block == 'string') {
-            this.e.innerHTML = block;
-        } else if  (block instanceof HTMLElement) {
-            this.e.appendChild(cellData.html);
-        }
-
-        for (let i in attributes) {   
-            this.e.setAttribute(i, attributes[i]);
-        }
+        this.textContent = false;    
 
     }
         
 
     text(t) {
-        this.e.textContent = t;
+        this.textContent = t;
         return this;
     }
 
     get() {
-        return this.e;
+
+
+        let e = document.createElement(this.tag);
+
+
+        if (typeof this.block == 'string') {
+            e.innerHTML = this.block;
+        } else if  (this.block instanceof HTMLElement) {
+            e.appendChild(this.block);
+        }
+
+        for (const i of  Object.keys(this.attributes)) {   
+            e.setAttribute(i, this.attributes[i]);
+        }
+
+        if (this.textContent) {
+            e.textContent = this.textContent;
+        } 
+
+        return e;
     }
       
 
     toString() {
-        return this.e.innerHTML;
+        return this.get().innerHTML;
     }      
         
 

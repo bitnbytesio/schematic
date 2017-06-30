@@ -1,3 +1,7 @@
 @function color($colors, $key) {
 	@return map-get($colors,$key);
 }
+
+@function size($value) {
+	@return $base-font-size * $value
+}
