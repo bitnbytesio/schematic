@@ -2,14 +2,14 @@
 @import 'functions';
 
 .schematic-dom {
-	.schematic-table {
 
 		font-family: $font_family;
 	    font-size: 100%;
 	    line-height: 1.42857;
 	    color: color($colors, 'dark');
+	    width: 100%;
 
-		width: 100%;
+	.schematic-table {		
 		background-color: transparent;
 	    border-collapse: collapse;
 		border-spacing: 0px;

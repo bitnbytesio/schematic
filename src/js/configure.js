@@ -29,6 +29,13 @@ export default function boot() {
     module(key) {
 
     },
+
+    tryNow(name, identity) {
+    	 if (typeof _applications[name] != 'undefined') {
+    	 	_applications[name].instance.tryNow(identity);
+    	 }
+    },
+
     boot(app, element) {
 
 
@@ -47,6 +54,8 @@ export default function boot() {
 	        element.setAttribute('class', (element.getAttribute('class') || '') + ' schematic-dom');
 	            
 	        app.selector = element;
+
+	        app.instance.selector = element;
 
 	        app.booted = true;
 
@@ -73,8 +82,8 @@ export default function boot() {
 	            stage.get(app.instance._models[model]);
 	            
 	        }
-	        
-	    }
+        
+    	}
 	});
 
 	_registerProviders([

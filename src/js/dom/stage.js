@@ -24,7 +24,7 @@ export default class draw  {
 
             var tbody = [];
 
-            for (let iField in fields) {
+            for (let iField = 0;  iField < fields.length; iField++) {
 
                 var field = fields[iField];
 
@@ -34,7 +34,7 @@ export default class draw  {
                     var text = new element('input', {
                         type:field.type, 
                         name: field.name, 
-
+                        "data-param-type": field.param_type || 'form',
                         class:"element " + (field.param_type || 'form') + ""
                     }).get();
                     trow.push(text);
@@ -49,7 +49,7 @@ export default class draw  {
             }
 
             // create form submit or try now button
-            let button = new element('button', {class:'schematic-btn', onclick:'schematic.tryNow("'+appIdentity+'")', 'data-target':appIdentity }).text('Try Now').get();
+            let button = new element('button', {type: 'button', class:'schematic-btn', onclick:'schematic.tryNow("'+app.name+'", "'+appIdentity+'")', 'data-target':appIdentity }).text('Try Now').get();
 
             // start creating table
             let t = new table();
@@ -96,7 +96,7 @@ export default class draw  {
             var container = new element('div', {class: 'body-content'}).get();
 
             // create form element
-            var form = new element('form', {class: 'schematic-form', id: appIdentity}).get();
+            var form = new element('form', {class: 'schematic-form', id: appIdentity, method:model[p].method || 'get'}).get();
 
             // insert previously created table in form
             form.appendChild(tableDom);

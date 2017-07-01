@@ -20,6 +20,25 @@ class application {
 		this._providers = list;
 	}
 
+	tryNow(identity) {
+		
+		var form = this.selector.querySelector("#" + identity);
+		let method = form.getAttribute('method');
+
+		let hasErrorElements = form.querySelector('.has-error');
+
+		for (var i = 0; i < hasErrorElements.length; i++) {
+		   hasErrorElements[i].classList.remove('has-error');
+		}
+
+		let errorElements = form.querySelector('.error');
+
+		for (var i = 0; i < errorElements.length; i++) {
+		   errorElements[i].outerHTML = '';
+		}
+
+	}
+
 	
 
 }
