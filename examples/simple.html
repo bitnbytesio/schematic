@@ -32,19 +32,35 @@
 	myApp.model('user', [{
         title: 'User Dashboard',
         description: '',
-        action: '/user/dashboard',
+        action: '/user/dashboard/:id/:name',
         method: 'get',
         data: [
             {
                 type: 'text',
                 name: 'X-Access-Token',
                 description: 'Enter your api token',
-                param_type: 'header',
+                param_type: 'head',
                 data_type: 'string',
                 required: true
             },
             {
-                type: 'text',
+                data_type: 'param',
+                name: 'id',
+                required: true
+            },
+            {
+                data_type: 'param',
+                name: 'name',
+                required: true
+            },
+            {
+                type: 'checkbox',
+                name: 'remember',
+                required: true,
+                options: {'1d':'1 Day', '2d':'2 Day', '3d':'3 Day'}
+            },
+            {
+                type: 'textarea',
                 name: 'with',
                 description: 'Enter comma seperated relations (organizations, questions, memberships, profile, profile.member, profile.address, profile.organization)',
                 param_type: 'form',

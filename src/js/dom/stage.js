@@ -24,27 +24,10 @@ export default class draw  {
 
             var tbody = [];
 
+            // create fileds
             for (let iField = 0;  iField < fields.length; iField++) {
 
-                var field = fields[iField];
-
-                var trow = [field.name];
-
-                if (field.type == 'text' || field.type == 'password' || field.type == 'file' || field.type == 'email') {
-                    var text = new element('input', {
-                        type:field.type, 
-                        name: field.name, 
-                        "data-param-type": field.param_type || 'form',
-                        class:"element " + (field.param_type || 'form') + ""
-                    }).get();
-                    trow.push(text);
-                }
-
-                trow.push(field.description || '');
-                trow.push(field.param_type || 'string');
-                trow.push(field.data_type || 'string');
-
-                tbody.push(trow);
+                tbody.push(this.createField(fields[iField]));
 
             }
 
@@ -116,5 +99,86 @@ export default class draw  {
             app.selector.appendChild(d);
         }
     }
+
+    createField(field) {
+
+        let trow = [field.name];
+
+        let eleType = 'input';
+
+        field.type = field.type || 'text';
+
+        if (['text', 'password', 'file', 'email', 'tel', 'number'].indexOf(field.type) >= 0) {
+            eleType = 'input';
+            
+        }
+
+        if (field.type == 'textarea') {
+            eleType = 'textarea';
+        }
+   
+
+        if (field.type == 'checkbox' && field.options) {
+
+            var ele = new element('div', {
+                class:"group-checkbox"
+            }).get();
+
+            let options = {};
+
+            if (field.options instanceof Array && field.options.length) {
+                for (let a = 0; a < field.options.length; a++) {
+                    options[field.options[a]] = field.options[a];
+                }
+            } else {
+                options = field.options;
+            }
+
+            // here i was on jul 6th
+            console.log(field.options);
+
+            for (let label in Object.keys(field.options)) {
+
+                let labelEle = new element('label', {
+                    class:"element-label " + (field.param_type || 'form') + ""
+                }).text(label).get();
+
+                 let inputEle = new element('input', {
+                    type:'checkbox', 
+                    name: field.name, 
+                    "data-param-type": field.param_type || 'form',
+                    class:"element " + (field.param_type || 'form') + ""
+                }).get();
+
+                 labelEle.appendChild(inputEle);
+
+                 ele.appendChild(labelEle);
+            }
+
+
+        }
+
+        if (typeof ele == 'undefined') {
+
+            var ele = new element(eleType, {
+                    type:field.type, 
+                    name: field.name, 
+                    "data-param-type": field.param_type || 'form',
+                    class:"element " + (field.param_type || 'form') + ""
+                }).get();
+
+        } 
+        
+        trow.push(ele);
+
+        trow.push(field.description || '');
+        trow.push(field.param_type || 'string');
+        trow.push(field.data_type || 'string');
+
+        return trow;
+
+    }
+
+
 
 }
