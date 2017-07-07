@@ -100,7 +100,7 @@ export default class table {
 
      tbody( rows ) {
 
-        console.log(rows);
+
         var body = this.t.createTBody();
 
         for (let i = 0; i< rows.length; i++) {

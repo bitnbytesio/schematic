@@ -16,6 +16,14 @@ request.get('http://192.168.1.128/mchool/').then(function (r) {
 	console.log(r);
 });*/
 
+/* 
+
+@deps() decorater
+
+to resolve dependencies resolve()
+
+*/
+
 
 
 boot();

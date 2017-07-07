@@ -44,7 +44,7 @@
                 required: true
             },
             {
-                data_type: 'param',
+                param_type: 'param',
                 name: 'id',
                 required: true
             },
@@ -58,6 +58,18 @@
                 name: 'remember',
                 required: true,
                 options: {'1d':'1 Day', '2d':'2 Day', '3d':'3 Day'}
+            },
+            {
+                type: 'select',
+                name: 'language',
+                required: true,
+                options: {'en':'English', 'pu':'Punjabi', 'hi':'Hindi'}
+            },
+             {
+                type: 'radio',
+                name: 'gender',
+                required: true,
+                options: ['male', 'female', 'other']
             },
             {
                 type: 'textarea',

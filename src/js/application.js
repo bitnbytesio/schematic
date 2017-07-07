@@ -87,7 +87,7 @@ class application {
 					formData.append(name, value);
 				}
 
-				if ( ele.classList.contains('path') ) {
+				if ( ele.classList.contains('path') || ele.classList.contains('param') ) {
 	                params[name] = value;
 	            }
 

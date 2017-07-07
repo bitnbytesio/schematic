@@ -134,10 +134,11 @@ export default class draw  {
                 options = field.options;
             }
 
-            // here i was on jul 6th
-            console.log(field.options);
+                
+            let objectKeys = Object.keys(field.options);
+            for (let k of objectKeys) {
 
-            for (let label in Object.keys(field.options)) {
+                let label = field.options[ k ];
 
                 let labelEle = new element('label', {
                     class:"element-label " + (field.param_type || 'form') + ""
@@ -145,7 +146,7 @@ export default class draw  {
 
                  let inputEle = new element('input', {
                     type:'checkbox', 
-                    name: field.name, 
+                    name: k, 
                     "data-param-type": field.param_type || 'form',
                     class:"element " + (field.param_type || 'form') + ""
                 }).get();
@@ -153,6 +154,62 @@ export default class draw  {
                  labelEle.appendChild(inputEle);
 
                  ele.appendChild(labelEle);
+            }
+
+
+        }
+
+        if (field.type == 'radio' && field.options) {
+
+            var ele = new element('div', {
+                class:"group-radio"
+            }).get();
+
+          
+
+           
+            for (let k of field.options) {
+
+                //let label = field.options[ k ];
+
+                let labelEle = new element('label', {
+                    class:"element-label " + (field.param_type || 'form') + ""
+                }).text(k).get();
+
+                 let inputEle = new element('input', {
+                    type:'radio', 
+                    name: field.name, 
+                    value: k,
+                    "data-param-type": field.param_type || 'form',
+                    class:"element " + (field.param_type || 'form') + ""
+                }).get();
+
+                 labelEle.appendChild(inputEle);
+
+                 ele.appendChild(labelEle);
+            }
+
+
+        }
+
+        if (field.type == 'select' && field.options) {
+
+            var ele = new element('select', {
+                name: field.name, 
+                "data-param-type": field.param_type || 'form',
+                class:"element " + (field.param_type || 'form') + ""
+            }).get();
+          
+
+           
+            for (let k of Object.keys(field.options)) {
+        
+                let option = new element('option', {
+                    value: k,                    
+                }).text(field.options[k]).get();     
+
+                 ele.appendChild(option);
+
             }
 
 
