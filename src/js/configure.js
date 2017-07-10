@@ -36,6 +36,19 @@ export default function boot() {
     	 }
     },
 
+    injectUrl(url, values) {
+   
+
+        for (let key of Object.keys(values)) {
+
+        	url = url.replace(':'+key, values[key]);
+           
+        }
+
+        return url;
+
+    },
+
     boot(app, element) {
 
 

@@ -1,0 +1,39 @@
+.schematic-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    user-select: none;
+    transition: all 1s ease-out;
+}
+
+.btn-get {
+    border-color: darken(color($colors, 'get'), 10%);
+    background-color: color($colors, 'get');
+    
+    &:hover {
+    	background-color: darken( color($colors, 'get'), 15% );
+    }
+}
+.btn-post {
+     border-color: darken(color($colors, 'post'), 10%);
+    background-color: color($colors, 'post');
+}
+.btn-put {
+    border-color: darken(color($colors, 'post'), 10%);
+    background-color: color($colors, 'put');
+}
+.btn-delete {
+    border-color: darken(color($colors, 'post'), 10%);
+    background-color: color($colors, 'delete');
+}
+.btn-options {
+    border-color: darken(color($colors, 'post'), 10%);
+    background-color: color($colors, 'options');
+}

@@ -3,11 +3,28 @@
 
 .schematic-dom {
 
-		font-family: $font_family;
+	@import 'buttons';
+
+	font-family: $font_family;
+    font-size: 1em;
+    line-height: 1.42857;
+    color: color($colors, 'dark');
+    width: 100%;
+
+	button, input[type="button"], input[type="reset"], input[type="submit"] {
+	    cursor: pointer;
+	}
+
+	button, input, select, textarea {
+	    margin: 0px;
+	    font-family: inherit;
 	    font-size: 100%;
-	    line-height: 1.42857;
-	    color: color($colors, 'dark');
-	    width: 100%;
+	}
+	input:not([type='radio']):not([type='checkbox']),select, textarea {
+		padding:5px;
+		box-sizing:content-box;
+	}
+
 
 	.schematic-table {		
 		background-color: transparent;
@@ -30,9 +47,6 @@
 
 
 
-	button, input[type="button"], input[type="reset"], input[type="submit"] {
-	    cursor: pointer;
-	}
 
 	.panel {
 	  background-color: $panelBackground;
@@ -69,9 +83,9 @@
 	  border-color: color($colors, 'get');
 
 		 .heading {
-			  background-color: #dff0d8;
-			  border-color: #d6e9c6;
-			  color: #3c763d;
+			  background-color: color($colors, 'get');
+			  border-color: darken(color($colors, 'get'), 15%);
+			  color: darken(color($colors, 'get'), 60%);
 		}
 
 	}

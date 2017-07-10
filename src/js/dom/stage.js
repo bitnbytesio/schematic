@@ -32,7 +32,7 @@ export default class draw  {
             }
 
             // create form submit or try now button
-            let button = new element('button', {type: 'button', class:'schematic-btn', onclick:'schematic.tryNow("'+app.name+'", "'+appIdentity+'")', 'data-target':appIdentity }).text('Try Now').get();
+            let button = new element('button', {type: 'button', class:'schematic-btn btn-' + (model[p].method || 'get'), onclick:'schematic.tryNow("'+app.name+'", "'+appIdentity+'")', 'data-target':appIdentity }).text('Try Now').get();
 
             // start creating table
             let t = new table();
@@ -78,8 +78,11 @@ export default class draw  {
             // create panel body container
             var container = new element('div', {class: 'body-content'}).get();
 
+            // form submission url 
+            let action = model[p].action || model[p].url;
+            
             // create form element
-            var form = new element('form', {class: 'schematic-form', id: appIdentity, method:model[p].method || 'get'}).get();
+            var form = new element('form', {class: 'schematic-form', id: appIdentity, method:model[p].method || 'get', 'data-action': action}).get();
 
             // insert previously created table in form
             form.appendChild(tableDom);
