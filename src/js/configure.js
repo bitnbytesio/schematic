@@ -107,8 +107,8 @@ export default function boot() {
 	document.addEventListener( "DOMContentLoaded", function(){
 	    document.removeEventListener( "DOMContentLoaded", this, false );
 
-	    for (var n in _applications) {
-	        var nodList = document.querySelectorAll('[data-schematic="'+n+'"]');
+	    for (let n in _applications) {
+	        let nodList = document.querySelectorAll('[data-schematic="'+n+'"]');
 
 	        if (nodList.length) {
 

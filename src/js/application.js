@@ -1,3 +1,5 @@
+import request from 'xhr/request';
+
 class application {
 
 	constructor(app, config) {
@@ -55,7 +57,7 @@ class application {
 		let hasErrorElements = form.querySelectorAll('.has-error');
 
 		if (hasErrorElements.length) {
-			for (var i = 0; i < hasErrorElements.length; i++) {
+			for (let i = 0; i < hasErrorElements.length; i++) {
 			   hasErrorElements[i].classList.remove('has-error');
 			}
 		}
@@ -65,7 +67,7 @@ class application {
 		let errorElements = form.querySelectorAll('.error');
 
 		if (errorElements.length) {
-			for (var i = 0; i < errorElements.length; i++) {
+			for (let i = 0; i < errorElements.length; i++) {
 			   errorElements[i].outerHTML = '';
 			}
 		}
@@ -137,6 +139,14 @@ class application {
 		console.log(formData);
 
 		console.log( schematic.injectUrl(url, params) );
+
+		request.get('http://192.168.1.128/mchool/' + schematic.injectUrl(url, params)).then(function (r) {
+			console.log(r);
+		});
+
+		request.post('http://192.168.1.128/mchool/' + schematic.injectUrl(url, params), formData).then(function (r) {
+			console.log(r);
+		});
 
 
 	}

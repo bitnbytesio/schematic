@@ -16,13 +16,13 @@ export default class draw  {
         for (let p = 0; p < model.length; p++) {
 
             // create unique id for the form element
-            var formId = app.name + ' ' + model[p].title;
-            var appIdentity = formId.slug();
+            let formId = app.name + ' ' + model[p].title;
+            let appIdentity = formId.slug();
 
             // get form fields from json
-            var fields = model[p].data;
+            let fields = model[p].properties || model[p].fields || model[p].data;
 
-            var tbody = [];
+            let tbody = [];
 
             // create fileds
             for (let iField = 0;  iField < fields.length; iField++) {

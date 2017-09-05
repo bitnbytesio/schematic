@@ -99,8 +99,13 @@ export default class request {
 		
 	}
 
-	static post() {
-		
+	static post(url, data, options) {
+		let config = config || {};
+
+		config.data = data;
+
+		let r = new request(url, 'post', config);
+		return r._create();
 	}
 
 	static put() {
